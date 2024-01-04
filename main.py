@@ -1,6 +1,8 @@
 from kivy.app import App
 from kivy.uix.widget import Widget
 from kivy.graphics import BorderImage
+from kivy.core.window import Window
+from kivy.utils import get_color_from_hex
 
 
 class Board(Widget):
@@ -21,5 +23,6 @@ class GameApp(App):
 
 
 if __name__ == '__main__':
+    Window.clearcolor = get_color_from_hex('faf8ef')
     GameApp().run()
 
