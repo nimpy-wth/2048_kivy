@@ -4,4 +4,7 @@
 FloatLayout:
     Board:
         id: board
+        size: [min(root.width, root.height)-2*padding]*2
+        size_hint: (None,None)
+        pos_hint:{'center_x':0.5, 'center_y': 0.5}
         center : root.center
