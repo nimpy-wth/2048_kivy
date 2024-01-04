@@ -11,7 +11,7 @@ class Board(Widget):
         with self.canvas.before:
             BorderImage(pos=self.pos, 
                         size=self.size, 
-                        source='board.png')
+                        source='boardbg.png')
 
 
 class GameApp(App):
