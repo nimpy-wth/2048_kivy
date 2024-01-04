@@ -14,12 +14,12 @@ class Board(Widget):
                         source='board.png')
 
 
-class MyGameApp(App):
+class GameApp(App):
     def on_start(self):
         board = self.root.ids.board
         board.board_background()
 
 
 if __name__ == '__main__':
-    MyGameApp().run()
+    GameApp().run()
 
