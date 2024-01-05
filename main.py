@@ -12,6 +12,12 @@ def all_cells():
             yield (x,y)
 
 class Board(Widget):
+    b = None
+
+    def reset(self):
+        self.b = [[None for i in range(4)] 
+                for j in range(4)]
+    
     def __init__(self, **kwargs):
         super(Board, self).__init__(**kwargs)
         self.resize()
@@ -33,6 +39,7 @@ class Board(Widget):
                 BorderImage(pos=self.cell_pos(board_x, board_y), 
                             size=self.cell_size, 
                             source='cell.png')
+    
 
     on_pos = resize
     on_size = resize
@@ -41,7 +48,8 @@ class Board(Widget):
 class GameApp(App):
     def on_start(self):
         board = self.root.ids.board
-        board.resize()
+        # board.resize()
+        board.reset()
 
 
 if __name__ == '__main__':
