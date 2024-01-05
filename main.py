@@ -8,18 +8,22 @@ from kivy.utils import get_color_from_hex
 class Board(Widget):
     def __init__(self, **kwargs):
         super(Board, self).__init__(**kwargs)
+        self.resize()
 
-    def board_background(self):
+    def resize(self, *args):
+        self.canvas.before.clear()
         with self.canvas.before:
-            BorderImage(pos=self.pos, 
-                        size=self.size, 
+            BorderImage(pos=self.pos,
+                        size=self.size,
                         source='boardbg.png')
+    on_pos = resize
+    on_size = resize
 
 
 class GameApp(App):
     def on_start(self):
         board = self.root.ids.board
-        board.board_background()
+        board.resize()
 
 
 if __name__ == '__main__':
