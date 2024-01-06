@@ -5,6 +5,11 @@ from kivy.core.window import Window
 from kivy.utils import get_color_from_hex
 from kivy.properties import ListProperty, NumericProperty
 
+colors = ['EEE4DA', 'EDE0C8', 'F2B179',
+        'F59563', 'F67C5F', 'F65E3B', 'EDCF72',
+        'EDCC61', 'EDC850', 'EDC53F', 'EDC22E']
+
+tile_colors = {2**i: color for i, color in enumerate(colors, start=1)}
 
 spacing = 15
 
@@ -16,7 +21,7 @@ def all_cells():
 class Tile(Widget):
     font_size = NumericProperty(24)
     number = NumericProperty(2)
-    color = ListProperty(get_color_from_hex('EEE4DA'))
+    color = ListProperty(get_color_from_hex(tile_colors[2]))
     number_color = ListProperty(get_color_from_hex('776E65'))
 
 
