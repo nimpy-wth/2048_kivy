@@ -3,6 +3,8 @@ from kivy.uix.widget import Widget
 from kivy.graphics import BorderImage, Color
 from kivy.core.window import Window
 from kivy.utils import get_color_from_hex
+from kivy.properties import ListProperty, NumericProperty
+
 
 spacing = 15
 
@@ -10,6 +12,13 @@ def all_cells():
     for x in range(4):
         for y in range (4):
             yield (x,y)
+
+class Tile(Widget):
+    font_size = NumericProperty(24)
+    number = NumericProperty(2)
+    color = ListProperty(get_color_from_hex('EEE4DA'))
+    number_color = ListProperty(get_color_from_hex('776E65'))
+
 
 class Board(Widget):
     b = None
