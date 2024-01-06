@@ -24,6 +24,13 @@ class Tile(Widget):
     color = ListProperty(get_color_from_hex(tile_colors[2]))
     number_color = ListProperty(get_color_from_hex('776E65'))
 
+    def __init__(self, number = 2,**kwargs):
+        super(Tile,self).__init__(**kwargs)
+        self.font_size = 0.5 * self.width
+        self.number = number
+        self.update_colors()
+
+
 
 class Board(Widget):
     b = None
@@ -53,8 +60,8 @@ class Board(Widget):
                 BorderImage(pos=self.cell_pos(board_x, board_y), 
                             size=self.cell_size, 
                             source='cell.png')
+                
     
-
     on_pos = resize
     on_size = resize
 
