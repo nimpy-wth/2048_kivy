@@ -18,6 +18,7 @@ def all_cells():
         for y in range (4):
             yield (x,y)
 
+
 class Tile(Widget):
     font_size = NumericProperty(24)
     number = NumericProperty(2)
@@ -30,6 +31,15 @@ class Tile(Widget):
         self.number = number
         self.update_colors()
 
+    def update_colors(self):
+        self.color = get_color_from_hex(tile_colors[self.number])
+        if self.number > 4:
+            self.number_color = get_color_from_hex('F9F6F2')
+
+    def resize(self, pos, size):
+        self.pos = pos
+        self.size = size
+        self.font_size = 0.5 * self.width
 
 
 class Board(Widget):
