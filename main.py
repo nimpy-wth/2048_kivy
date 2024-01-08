@@ -4,6 +4,7 @@ from kivy.graphics import BorderImage, Color
 from kivy.core.window import Window
 from kivy.utils import get_color_from_hex
 from kivy.properties import ListProperty, NumericProperty
+import random
 
 colors = ['EEE4DA', 'EDE0C8', 'F2B179',
         'F59563', 'F67C5F', 'F65E3B', 'EDCF72',
@@ -45,9 +46,18 @@ class Tile(Widget):
 class Board(Widget):
     b = None
 
+    def new_tile(self, *args):
+        empty_cells = [(x, y) for x, y in all_cells() if self.b[x][y] is None]
+        x, y = random.choice(empty_cells)
+        tile = Tile(pos=self.cell_pos(x, y), size=self.cell_size)
+        self.b[x][y] = tile
+        self.add_widget(tile)
+
     def reset(self):
         self.b = [[None for i in range(4)] 
                 for j in range(4)]
+        self.new_tile()
+        self.new_tile()
     
     def __init__(self, **kwargs):
         super(Board, self).__init__(**kwargs)
