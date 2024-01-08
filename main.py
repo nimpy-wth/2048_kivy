@@ -71,7 +71,15 @@ class Board(Widget):
                             size=self.cell_size, 
                             source='cell.png')
                 
-    
+            if not self.b :
+                return
+            
+            for board_x, board_y in all_cells():
+                tile = self.b[board_x][board_y]
+            if tile:
+                tile.resize(pos=self.cell_pos(board_x, board_y), 
+                            size=self.cell_size)
+
     on_pos = resize
     on_size = resize
 
