@@ -1,10 +1,15 @@
 from kivy.app import App
 from kivy.uix.widget import Widget
 from kivy.graphics import BorderImage, Color
-from kivy.core.window import Window
+from kivy.core.window import Window, Keyboard
 from kivy.utils import get_color_from_hex
 from kivy.properties import ListProperty, NumericProperty
 import random
+
+key_vectors = {Keyboard.keycodes['up']: (0, 1), 
+            Keyboard.keycodes['right']: (1, 0),
+            Keyboard.keycodes['down']: (0, -1),
+            Keyboard.keycodes['left']: (-1, 0)}
 
 colors = ['EEE4DA', 'EDE0C8', 'F2B179',
         'F59563', 'F67C5F', 'F65E3B', 'EDCF72',
@@ -83,7 +88,7 @@ class Board(Widget):
                 
             if not self.b :
                 return
-            
+
             for board_x, board_y in all_cells():
                 tile = self.b[board_x][board_y]
             if tile:
@@ -92,6 +97,10 @@ class Board(Widget):
 
     on_pos = resize
     on_size = resize
+
+    def on_key_down(self, window, key, *args):
+        if key in key_vectors:
+            self.move(*key_vectors[key])
 
 
 class GameApp(App):
