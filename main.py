@@ -51,6 +51,14 @@ class Tile(Widget):
 class Board(Widget):
     b = None
 
+    def valid_cell(self, board_x, board_y):
+        return (board_x >= 0 and board_y >= 0 
+                and board_x <= 3 and board_y <= 3)
+
+    def can_move(self, board_x, board_y):
+        return (self.valid_cell(board_x, board_y) 
+                and self.b[board_x][board_y] is None)
+    
     def new_tile(self, *args):
         empty_cells = [(x, y) for x, y in all_cells() if self.b[x][y] is None]
         x, y = random.choice(empty_cells)
@@ -78,7 +86,7 @@ class Board(Widget):
         with self.canvas.before:
             BorderImage(pos=self.pos,
                         size=self.size,
-                        source='boardbg.png')
+                        source='board.png')
             
             Color(*get_color_from_hex('ccc0b4'))
             for board_x, board_y in all_cells():
