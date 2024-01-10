@@ -52,14 +52,6 @@ class Tile(Widget):
 class Board(Widget):
     b = None
 
-    def valid_cell(self, board_x, board_y):
-        return (board_x >= 0 and board_y >= 0 
-                and board_x <= 3 and board_y <= 3)
-
-    def can_move(self, board_x, board_y):
-        return (self.valid_cell(board_x, board_y) 
-                and self.b[board_x][board_y] is None)
-    
     def new_tile(self, *args):
         empty_cells = [(x, y) for x, y in all_cells() if self.b[x][y] is None]
         x, y = random.choice(empty_cells)
@@ -107,6 +99,18 @@ class Board(Widget):
     on_pos = resize
     on_size = resize
 
+    def on_key_down(self, window, key, *args):
+        if key in key_vectors:
+            self.move(*key_vectors[key])
+            
+    def valid_cell(self, board_x, board_y):
+        return (board_x >= 0 and board_y >= 0 
+                and board_x <= 3 and board_y <= 3)
+
+    def can_move(self, board_x, board_y):
+        return (self.valid_cell(board_x, board_y) 
+                and self.b[board_x][board_y] is None)
+    
     def move(self, dir_x, dir_y):
         for board_x, board_y in all_cells(dir_x > 0, dir_y > 0):
             tile = self.b[board_x][board_y]
@@ -126,10 +130,10 @@ class Board(Widget):
                                 transition='linear')
                 anim.start(tile)
 
-    def on_key_down(self, window, key, *args):
-        if key in key_vectors:
-            self.move(*key_vectors[key])
-
+    def can_merge(self, board_x, board_y, number):
+        return (self.valid_cell(board_x, board_y) 
+                and self.b[board_x][board_y] is not None 
+                and self.b[board_x][board_y].number == number)
 
 class GameApp(App):
     def on_start(self):
