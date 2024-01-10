@@ -4,6 +4,7 @@ from kivy.graphics import BorderImage, Color
 from kivy.core.window import Window, Keyboard
 from kivy.utils import get_color_from_hex
 from kivy.properties import ListProperty, NumericProperty
+from kivy.animation import Animation
 import random
 
 key_vectors = {Keyboard.keycodes['up']: (0, 1), 
@@ -19,10 +20,10 @@ tile_colors = {2**i: color for i, color in enumerate(colors, start=1)}
 
 spacing = 15
 
-def all_cells():
-    for x in range(4):
-        for y in range (4):
-            yield (x,y)
+def all_cells(flip_x=False, flip_y=False):
+    for x in (reversed(range(4)) if flip_x else range(4)):
+        for y in (reversed(range(4)) if flip_y else range(4)):
+            yield (x, y)
 
 
 class Tile(Widget):
@@ -106,6 +107,25 @@ class Board(Widget):
     on_pos = resize
     on_size = resize
 
+    def move(self, dir_x, dir_y):
+        for board_x, board_y in all_cells(dir_x > 0, dir_y > 0):
+            tile = self.b[board_x][board_y]
+            if not tile:
+                continue
+            x, y = board_x, board_y
+
+            while self.can_move(x + dir_x, y + dir_y):
+                self.b[x][y] = None
+                x += dir_x
+                y += dir_y
+                self.b[x][y] = tile
+
+                if x == board_x and y == board_y:
+                    continue
+                anim = Animation(pos=self.cell_pos(x, y), duration=0.25, 
+                                transition='linear')
+                anim.start(tile)
+
     def on_key_down(self, window, key, *args):
         if key in key_vectors:
             self.move(*key_vectors[key])
@@ -116,6 +136,7 @@ class GameApp(App):
         board = self.root.ids.board
         # board.resize()
         board.reset()
+        Window.bind(on_key_down=board.on_key_down)
 
 
 if __name__ == '__main__':
