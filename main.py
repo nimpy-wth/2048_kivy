@@ -51,6 +51,7 @@ class Tile(Widget):
 
 class Board(Widget):
     b = None
+    moving = None
 
     def new_tile(self, *args):
         empty_cells = [(x, y) for x, y in all_cells() if self.b[x][y] is None]
@@ -58,6 +59,7 @@ class Board(Widget):
         tile = Tile(pos=self.cell_pos(x, y), size=self.cell_size)
         self.b[x][y] = tile
         self.add_widget(tile)
+        self.moving = False
 
     def reset(self):
         self.b = [[None for i in range(4)] 
@@ -112,6 +114,8 @@ class Board(Widget):
                 and self.b[board_x][board_y] is None)
     
     def move(self, dir_x, dir_y):
+        if self.moving :
+            return
         for board_x, board_y in all_cells(dir_x > 0, dir_y > 0):
             tile = self.b[board_x][board_y]
             if not tile:
@@ -124,11 +128,23 @@ class Board(Widget):
                 y += dir_y
                 self.b[x][y] = tile
 
-                if x == board_x and y == board_y:
-                    continue
-                anim = Animation(pos=self.cell_pos(x, y), duration=0.25, 
-                                transition='linear')
-                anim.start(tile)
+            if self.can_merge(x + dir_x, y + dir_y, tile.number):
+                self.b[x][y] = None
+                x += dir_x
+                y += dir_y
+                self.remove_widget(self.b[x][y])
+                self.b[x][y] = tile
+                tile.number *= 2
+                tile.update_colors()
+
+            if x == board_x and y == board_y:
+                continue
+            anim = Animation(pos=self.cell_pos(x, y), duration=0.25, 
+                            transition='linear')
+            if not self.moving:
+                anim.on_complete = self.new_tile
+                self.moving = True
+            anim.start(tile)
 
     def can_merge(self, board_x, board_y, number):
         return (self.valid_cell(board_x, board_y) 
