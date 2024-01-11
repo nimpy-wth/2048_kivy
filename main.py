@@ -69,6 +69,9 @@ class Board(Widget):
         self.b[x][y] = tile
         self.add_widget(tile)
         self.moving = False
+
+        if len(empty_cells) == 1 and self.is_deadlocked():
+            print('Game Over')
         
     def reset(self):
         self.b = [[None for i in range(4)] 
@@ -153,7 +156,7 @@ class Board(Widget):
 
             if x == board_x and y == board_y:
                 continue
-            anim = Animation(pos=self.cell_pos(x, y), duration=0.25, 
+            anim = Animation(pos=self.cell_pos(x, y), duration=0.20, 
                             transition='linear')
             if not self.moving:
                 anim.on_complete = self.new_tile
