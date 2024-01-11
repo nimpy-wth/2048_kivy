@@ -79,21 +79,19 @@ class Board(Widget):
         self.cell_size = (.25 * (self.width - 5 * spacing),) * 2
         self.canvas.before.clear()
         with self.canvas.before:
-            BorderImage(pos=self.pos,
-                        size=self.size,
+            BorderImage(pos=self.pos,size=self.size,
                         source='board.png')
-            
             Color(*get_color_from_hex('ccc0b4'))
             for board_x, board_y in all_cells():
                 BorderImage(pos=self.cell_pos(board_x, board_y), 
                             size=self.cell_size, 
                             source='cell.png')
                 
-            if not self.b :
-                return
+        if not self.b :
+            return
 
-            for board_x, board_y in all_cells():
-                tile = self.b[board_x][board_y]
+        for board_x, board_y in all_cells():
+            tile = self.b[board_x][board_y]
             if tile:
                 tile.resize(pos=self.cell_pos(board_x, board_y), 
                             size=self.cell_size)
@@ -136,6 +134,8 @@ class Board(Widget):
                 self.b[x][y] = tile
                 tile.number *= 2
                 tile.update_colors()
+                if tile.number == 2048 :
+                    print('You win the game.')
 
             if x == board_x and y == board_y:
                 continue
@@ -146,10 +146,6 @@ class Board(Widget):
                 self.moving = True
             anim.start(tile)
 
-    def can_merge(self, board_x, board_y, number):
-        return (self.valid_cell(board_x, board_y) 
-                and self.b[board_x][board_y] is not None 
-                and self.b[board_x][board_y].number == number)
 
 class GameApp(App):
     def on_start(self):
