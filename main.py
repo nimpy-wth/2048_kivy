@@ -53,6 +53,15 @@ class Board(Widget):
     b = None
     moving = None
 
+    def is_deadlocked(self):
+        for x, y in all_cells():
+            if self.b[x][y] is None:
+                return False
+            number = self.b[x][y].number
+            if self.can_merge(x + 1, y, number) or self.can_merge(x, y + 1, number):
+                return False
+        return True
+
     def new_tile(self, *args):
         empty_cells = [(x, y) for x, y in all_cells() if self.b[x][y] is None]
         x, y = random.choice(empty_cells)
@@ -60,7 +69,7 @@ class Board(Widget):
         self.b[x][y] = tile
         self.add_widget(tile)
         self.moving = False
-
+        
     def reset(self):
         self.b = [[None for i in range(4)] 
                 for j in range(4)]
@@ -111,6 +120,11 @@ class Board(Widget):
         return (self.valid_cell(board_x, board_y) 
                 and self.b[board_x][board_y] is None)
     
+    def can_merge(self, board_x, board_y, number):
+        return (self.valid_cell(board_x, board_y) 
+                and self.b[board_x][board_y] is not None 
+                and self.b[board_x][board_y].number == number)
+
     def move(self, dir_x, dir_y):
         if self.moving :
             return
