@@ -178,7 +178,9 @@ class Board(Widget):
         else:
             self.move(0, 1 if v.y > 0 else -1)
 
+
 class GameApp(App):
+
     def on_start(self):
         board = self.root.ids.board
         board.reset()
@@ -216,6 +218,45 @@ class GameApp(App):
                 background_color = get_color_from_hex('BF3636')))
 
         return popup_exit
+    
+    def restart_button_click(self, instance):
+        self.restart_popup(instance).open()
+
+    def restart_popup(self, obj):
+        box_popup = BoxLayout(orientation="horizontal")
+
+        popup_restart = Popup(
+            title = "Confirmation",
+            title_size = 40,
+            content = box_popup,
+            size_hint = (0.5, 0.4),
+            auto_dismiss = True
+        )
+
+        box_popup.add_widget(Label(
+            text = "Are you sure you want to restart?",
+            font_size = 30,
+            pos_hint = {"x": 0, "y": 0.2}
+        ))
+
+        box_popup.add_widget(Button(
+            text = "Yes",
+            on_release = self.new_game,
+            on_press = lambda *args: popup_restart.dismiss(),
+            size_hint = (0.45, 0.2),
+            background_normal = '',
+            background_color = get_color_from_hex('54B87A')
+        ))
+
+        box_popup.add_widget(Button(
+            text = "No",
+            on_press = lambda *args: popup_restart.dismiss(),
+            size_hint = (0.45, 0.2),
+            background_normal = '',
+            background_color = get_color_from_hex('BF3636')
+        ))
+
+        return popup_restart
 
     def new_game(self, *args):
         board = self.root.ids.board
@@ -233,7 +274,7 @@ class GameApp(App):
                             background_normal = '')
         
         restart_button = Button(text='Restart', pos = (50, 140),
-                                on_press = self.new_game,
+                                on_press = self.restart_button_click,
                                 background_color = get_color_from_hex('AEA189'),
                                 background_normal = '')
 
