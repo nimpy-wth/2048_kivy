@@ -184,65 +184,42 @@ class GameApp(App):
     def on_start(self):
         board = self.root.ids.board
         board.reset()
-        Window.bind(on_key_down = board.on_key_down)
+        Window.bind(on_key_down=board.on_key_down)
 
     def exit_button_click(self, instance):
-        self.exit_popup(instance).open()
+        self.confirm_popup(instance, "Are you sure you want to exit?",
+                            self.exit_confirm).open()
 
-    def exit_confirm(self, instance):
-        App.get_running_app().stop()
-
-    def exit_popup(self, obj):
-        box_popup = BoxLayout(orientation="horizontal") 
-
-        popup_exit = Popup(title = "Confirmation",
-            title_size = 40,
-            content = box_popup,
-            size_hint = (0.5, 0.4),
-            auto_dismiss = True )
-
-        box_popup.add_widget(Label(text = "Are you sure you want to exit?",
-                font_size = 30,
-                pos_hint = {"x": 0, "y": 0.2}))
-
-        box_popup.add_widget(Button(text = "Yes",
-                on_release = self.exit_confirm,
-                size_hint = (0.45, 0.2),
-                background_normal = '',
-                background_color = get_color_from_hex('54B87A')))
-
-        box_popup.add_widget(Button(text = "No",
-                on_press = lambda *args: popup_exit.dismiss(),
-                size_hint = (0.45, 0.2),
-                background_normal = '',
-                background_color = get_color_from_hex('BF3636')))
-
-        return popup_exit
-    
     def restart_button_click(self, instance):
-        self.restart_popup(instance).open()
+        self.confirm_popup(instance, "Are you sure you want to restart?",
+                            self.new_game).open()
 
-    def restart_popup(self, obj):
-        box_popup = BoxLayout(orientation="horizontal")
+    def confirm_popup(self, obj, message, callback):
+        box_popup = BoxLayout(orientation = "horizontal")
 
-        popup_restart = Popup(
+        popup = Popup(
             title = "Confirmation",
             title_size = 40,
+            title_color = get_color_from_hex('574C44'),
             content = box_popup,
             size_hint = (0.5, 0.4),
-            auto_dismiss = True
-        )
+            auto_dismiss = True,
+            background_color = get_color_from_hex('EADFD6'),
+            background = '',
+            )
 
         box_popup.add_widget(Label(
-            text = "Are you sure you want to restart?",
+            text = message,
             font_size = 30,
-            pos_hint = {"x": 0, "y": 0.2}
+            color = get_color_from_hex('574C44'),
+            size_hint_y = None,
+            height = 40,
+            pos_hint = {"center_x": 0.5,"center_y": 0.5},
         ))
 
         box_popup.add_widget(Button(
             text = "Yes",
-            on_release = self.new_game,
-            on_press = lambda *args: popup_restart.dismiss(),
+            on_release = lambda *args: self.confirm_callback(popup, callback),
             size_hint = (0.45, 0.2),
             background_normal = '',
             background_color = get_color_from_hex('54B87A')
@@ -250,13 +227,20 @@ class GameApp(App):
 
         box_popup.add_widget(Button(
             text = "No",
-            on_press = lambda *args: popup_restart.dismiss(),
+            on_press = lambda *args: popup.dismiss(),
             size_hint = (0.45, 0.2),
             background_normal = '',
             background_color = get_color_from_hex('BF3636')
         ))
 
-        return popup_restart
+        return popup
+
+    def confirm_callback(self, instance, callback):
+        instance.dismiss()
+        callback()
+
+    def exit_confirm(self):
+        App.get_running_app().stop()
 
     def new_game(self, *args):
         board = self.root.ids.board
