@@ -181,6 +181,10 @@ class GameApp(App):
         board.reset()
         Window.bind(on_key_down=board.on_key_down)
 
+    def exit_button_click(self, instance):
+        if instance.text == 'Exit':
+            App.get_running_app().stop()
+
 
 if __name__ == '__main__':
     Window.clearcolor = get_color_from_hex('faf8ef')
