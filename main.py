@@ -27,12 +27,13 @@ tile_colors = {2**i: color for i, color in enumerate(colors, start=1)}
 spacing = 15
 
 def all_cells(flip_x=False, flip_y=False):
-    for x in (reversed(range(4)) if flip_x else range(4)):
-        for y in (reversed(range(4)) if flip_y else range(4)):
+    for x in (reversed(range(5)) if flip_x else range(5)):
+        for y in (reversed(range(5)) if flip_y else range(5)):
             yield (x, y)
 
 
 class Tile(Widget):
+
     font_size = NumericProperty(24)
     number = NumericProperty(2)
     color = ListProperty(get_color_from_hex(tile_colors[2]))
@@ -56,6 +57,7 @@ class Tile(Widget):
 
 
 class Board(Widget):
+
     b = None
     moving = None
 
@@ -80,8 +82,8 @@ class Board(Widget):
             print('Game Over')
         
     def reset(self):
-        self.b = [[None for i in range(4)] 
-                for j in range(4)]
+        self.b = [[None for i in range(5)] 
+                for j in range(5)]
         self.new_tile()
         self.new_tile()
     
@@ -94,7 +96,7 @@ class Board(Widget):
                 self.y + spacing + board_y * (self.cell_size[1] + spacing))
 
     def resize(self, *args):
-        self.cell_size = (.25 * (self.width - 5 * spacing),) * 2
+        self.cell_size = (.20 * (self.width - 6 * spacing),) * 2
         self.canvas.before.clear()
         with self.canvas.before:
             BorderImage(pos=self.pos,size=self.size,
@@ -123,7 +125,7 @@ class Board(Widget):
             
     def valid_cell(self, board_x, board_y):
         return (board_x >= 0 and board_y >= 0 
-                and board_x <= 3 and board_y <= 3)
+                and board_x <= 4 and board_y <= 4)
 
     def can_move(self, board_x, board_y):
         return (self.valid_cell(board_x, board_y) 
