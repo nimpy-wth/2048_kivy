@@ -196,13 +196,17 @@ class GameApp(App):
         board.new_tile()
         board.new_tile()
 
-        exit_button = Button(text='Exit', pos=(10, 10), 
-                            on_press=self.exit_button_click,)
-        new_game_button = Button(text='New Game', pos=(10, 150),
-                                on_press=self.new_game)
+        exit_button = Button(text='Exit', pos=(50, 20), 
+                            on_press=self.exit_button_click,
+                            background_color = get_color_from_hex('AEA189'),
+                            background_normal = '')
+        restart_button = Button(text='Restart', pos=(50, 140),
+                            on_press=self.new_game,
+                            background_color = get_color_from_hex('AEA189'),
+                            background_normal = '')
         
         board.add_widget(exit_button)
-        board.add_widget(new_game_button)
+        board.add_widget(restart_button)
 
         self.game_won = False
 
