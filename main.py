@@ -184,7 +184,7 @@ class GameApp(App):
     def on_start(self):
         board = self.root.ids.board
         board.reset()
-        Window.bind(on_key_down=board.on_key_down)
+        Window.bind(on_key_down = board.on_key_down)
 
     def exit_button_click(self, instance):
         self.confirm_popup(instance, "Are you sure you want to exit?",
@@ -252,12 +252,12 @@ class GameApp(App):
         board.new_tile()
         board.new_tile()
 
-        exit_button = Button(text = 'Exit', pos = (50, 20),
+        exit_button = Button(text = 'Exit', pos = (40, 20), size = (150,80),
                             on_press = self.exit_button_click,
                             background_color = get_color_from_hex('AEA189'),
                             background_normal = '')
         
-        restart_button = Button(text='Restart', pos = (50, 140),
+        restart_button = Button(text='Restart', pos = (40, 120),size = (150,90),
                                 on_press = self.restart_button_click,
                                 background_color = get_color_from_hex('AEA189'),
                                 background_normal = '')
