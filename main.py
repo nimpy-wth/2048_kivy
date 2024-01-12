@@ -7,6 +7,9 @@ from kivy.properties import ListProperty, NumericProperty
 from kivy.animation import Animation
 from kivy.vector import Vector
 from kivy.uix.button import Button
+from kivy.uix.popup import Popup
+from kivy.uix.label import Label
+from kivy.uix.boxlayout import BoxLayout
 
 import random
 
@@ -178,15 +181,43 @@ class Board(Widget):
 class GameApp(App):
     def on_start(self):
         board = self.root.ids.board
-        # board.resize()
         board.reset()
-        Window.bind(on_key_down=board.on_key_down)
+        Window.bind(on_key_down = board.on_key_down)
 
     def exit_button_click(self, instance):
-        if instance.text == 'Exit':
-            App.get_running_app().stop()
-    
-    def new_game(self,*args):
+        self.exit_popup(instance).open()
+
+    def exit_confirm(self, instance):
+        App.get_running_app().stop()
+
+    def exit_popup(self, obj):
+        box_popup = BoxLayout(orientation="horizontal") 
+
+        popup_exit = Popup(title = "Confirmation",
+            title_size = 40,
+            content = box_popup,
+            size_hint = (0.5, 0.4),
+            auto_dismiss = True )
+
+        box_popup.add_widget(Label(text = "Are you sure you want to exit?",
+                font_size = 30,
+                pos_hint = {"x": 0, "y": 0.2}))
+
+        box_popup.add_widget(Button(text = "Yes",
+                on_release = self.exit_confirm,
+                size_hint = (0.45, 0.2),
+                background_normal = '',
+                background_color = get_color_from_hex('54B87A')))
+
+        box_popup.add_widget(Button(text = "No",
+                on_press = lambda *args: popup_exit.dismiss(),
+                size_hint = (0.45, 0.2),
+                background_normal = '',
+                background_color = get_color_from_hex('BF3636')))
+
+        return popup_exit
+
+    def new_game(self, *args):
         board = self.root.ids.board
         b_children = board.children[:]
         for wid in b_children:
@@ -196,19 +227,24 @@ class GameApp(App):
         board.new_tile()
         board.new_tile()
 
-        exit_button = Button(text='Exit', pos=(50, 20), 
-                            on_press=self.exit_button_click,
-                            background_color = get_color_from_hex('AEA189'),
-                            background_normal = '')
-        restart_button = Button(text='Restart', pos=(50, 140),
-                            on_press=self.new_game,
+        exit_button = Button(text = 'Exit', pos = (50, 20),
+                            on_press = self.exit_button_click,
                             background_color = get_color_from_hex('AEA189'),
                             background_normal = '')
         
+        restart_button = Button(text='Restart', pos = (50, 140),
+                                on_press = self.new_game,
+                                background_color = get_color_from_hex('AEA189'),
+                                background_normal = '')
+
         board.add_widget(exit_button)
         board.add_widget(restart_button)
 
         self.game_won = False
+
+    def build(self):
+        return self.root
+
 
 if __name__ == '__main__':
     Window.clearcolor = get_color_from_hex('faf8ef')
