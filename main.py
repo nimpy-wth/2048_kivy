@@ -5,6 +5,8 @@ from kivy.core.window import Window, Keyboard
 from kivy.utils import get_color_from_hex
 from kivy.properties import ListProperty, NumericProperty
 from kivy.animation import Animation
+from kivy.vector import Vector
+
 import random
 
 key_vectors = {Keyboard.keycodes['up']: (0, 1), 
@@ -163,6 +165,14 @@ class Board(Widget):
                 self.moving = True
             anim.start(tile)
 
+    def on_touch_up(self, touch):
+        v = Vector(touch.pos) - Vector(touch.opos)
+        if v.length() < 20:
+            return
+        if abs(v.x) > abs(v.y):
+            self.move(1 if v.x > 0 else -1, 0)
+        else:
+            self.move(0, 1 if v.y > 0 else -1)
 
 class GameApp(App):
     def on_start(self):
