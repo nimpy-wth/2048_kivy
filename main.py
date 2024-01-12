@@ -6,6 +6,7 @@ from kivy.utils import get_color_from_hex
 from kivy.properties import ListProperty, NumericProperty
 from kivy.animation import Animation
 from kivy.vector import Vector
+from kivy.uix.button import Button
 
 import random
 
@@ -184,7 +185,26 @@ class GameApp(App):
     def exit_button_click(self, instance):
         if instance.text == 'Exit':
             App.get_running_app().stop()
+    
+    def new_game(self,*args):
+        board = self.root.ids.board
+        b_children = board.children[:]
+        for wid in b_children:
+            board.remove_widget(wid)
 
+        board.b = [[None for i in range(5)] for j in range(5)]
+        board.new_tile()
+        board.new_tile()
+
+        exit_button = Button(text='Exit', pos=(10, 10), 
+                            on_press=self.exit_button_click,)
+        new_game_button = Button(text='New Game', pos=(10, 150),
+                                on_press=self.new_game)
+        
+        board.add_widget(exit_button)
+        board.add_widget(new_game_button)
+
+        self.game_won = False
 
 if __name__ == '__main__':
     Window.clearcolor = get_color_from_hex('faf8ef')
