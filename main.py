@@ -61,6 +61,31 @@ class Board(Widget):
     b = None
     moving = None
 
+    popup_lose = Popup(
+            title = "Game Over",
+            title_size = 40,
+            title_color = get_color_from_hex('574C44'),
+            content = Label(text = "You Lose",font_size = 100,
+                            color = get_color_from_hex('574C44')),
+            size_hint = (0.5, 0.4),
+            size = (400, 400),
+            background_color = get_color_from_hex('EADFD6'),
+            background = ''
+        )
+    
+    popup_win = Popup(
+            title = "Game Over",
+            title_size = 40,
+            title_color = get_color_from_hex('574C44'),
+            content = Label(text = "You Win!",font_size = 100,
+                            color = get_color_from_hex('574C44')),
+            
+            size_hint = (0.5, 0.4),
+            size = (400, 400),
+            background_color = get_color_from_hex('EADFD6'),
+            background = ''
+        )
+
     def is_deadlocked(self):
         for x, y in all_cells():
             if self.b[x][y] is None:
@@ -80,6 +105,7 @@ class Board(Widget):
 
         if len(empty_cells) == 1 and self.is_deadlocked():
             print('Game Over')
+            self.popup_lose.open()
         
     def reset(self):
         self.b = [[None for i in range(5)] 
@@ -161,6 +187,7 @@ class Board(Widget):
                 tile.update_colors()
                 if tile.number == 2048 :
                     print('You win the game.')
+                    self.popup_win.open()
 
             if x == board_x and y == board_y:
                 continue
