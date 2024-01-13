@@ -10,6 +10,7 @@ from kivy.uix.button import Button
 from kivy.uix.popup import Popup
 from kivy.uix.label import Label
 from kivy.uix.boxlayout import BoxLayout
+from kivy.core.audio import SoundLoader
 
 import random
 
@@ -86,6 +87,11 @@ class Board(Widget):
             background = ''
         )
 
+    def __init__(self, **kwargs):
+        super(Board, self).__init__(**kwargs)
+        self.resize()
+        self.sound = SoundLoader.load('game_over.mp3')
+
     def is_deadlocked(self):
         for x, y in all_cells():
             if self.b[x][y] is None:
@@ -106,16 +112,13 @@ class Board(Widget):
         if len(empty_cells) == 1 and self.is_deadlocked():
             print('Game Over')
             self.popup_lose.open()
+            self.sound.play()
         
     def reset(self):
         self.b = [[None for i in range(5)] 
                 for j in range(5)]
         self.new_tile()
         self.new_tile()
-    
-    def __init__(self, **kwargs):
-        super(Board, self).__init__(**kwargs)
-        self.resize()
 
     def cell_pos(self, board_x, board_y):
         return (self.x + spacing + board_x * (self.cell_size[0] + spacing), 
@@ -188,6 +191,7 @@ class Board(Widget):
                 if tile.number == 2048 :
                     print('You win the game.')
                     self.popup_win.open()
+                    self.sound.play()
 
             if x == board_x and y == board_y:
                 continue
