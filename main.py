@@ -62,35 +62,47 @@ class Board(Widget):
     b = None
     moving = None
 
-    popup_lose = Popup(
-            title = "Game Over",
-            title_size = 40,
-            title_color = get_color_from_hex('574C44'),
-            content = Label(text = "You Lose",font_size = 100,
-                            color = get_color_from_hex('574C44')),
-            size_hint = (0.5, 0.4),
-            size = (400, 400),
-            background_color = get_color_from_hex('EADFD6'),
-            background = ''
-        )
-    
-    popup_win = Popup(
-            title = "Game Over",
-            title_size = 40,
-            title_color = get_color_from_hex('574C44'),
-            content = Label(text = "You Win!",font_size = 100,
-                            color = get_color_from_hex('574C44')),
-            
-            size_hint = (0.5, 0.4),
-            size = (400, 400),
-            background_color = get_color_from_hex('EADFD6'),
-            background = ''
-        )
-
     def __init__(self, **kwargs):
         super(Board, self).__init__(**kwargs)
         self.resize()
         self.sound = SoundLoader.load('game_over.mp3')
+
+    def win(self):
+        self.show_game_over_popup("You Win").open()
+
+    def lose(self):
+        self.show_game_over_popup("You Lose").open()
+        
+    def show_game_over_popup(self, message):
+        popup_title = "Game Over"
+        popup_content = BoxLayout(orientation = 'vertical')
+
+        popup_content.add_widget(Label(text = message, font_size=40, 
+                                color = get_color_from_hex('574C44')))
+        
+        popup = Popup(
+            title = popup_title,
+            title_size = 40,
+            title_color = get_color_from_hex('574C44'),
+            content = popup_content,
+            size = (400, 400),
+            background_color = get_color_from_hex('EADFD6'),
+            background = '',
+        )
+
+        close_button = Button(
+            text = 'Close',
+            size_hint=(None, None),
+            size = (150, 80),
+            on_press = lambda *args: popup.dismiss(),
+            background_color = get_color_from_hex('AEA189'),
+            background_normal = '',
+            pos_hint={'center_x': 0.5, 'center_y': 0.5}
+        )
+
+        popup_content.add_widget(close_button)
+
+        return popup
 
     def is_deadlocked(self):
         for x, y in all_cells():
@@ -111,7 +123,7 @@ class Board(Widget):
 
         if len(empty_cells) == 1 and self.is_deadlocked():
             print('Game Over')
-            self.popup_lose.open()
+            self.lose()
             self.sound.play()
         
     def reset(self):
@@ -190,7 +202,7 @@ class Board(Widget):
                 tile.update_colors()
                 if tile.number == 2048 :
                     print('You win the game.')
-                    self.popup_win.open()
+                    self.win()
                     self.sound.play()
 
             if x == board_x and y == board_y:
