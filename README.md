@@ -4,7 +4,7 @@
 This application is a classic implementation of the 2048 game using the Kivy framework. Dive straight into the game grid, where the goal is to reach the 2048 tile by merging tiles with the same number.
 
 ## Features
-    - Swipe or Arrow Key Controls : Use either swipe gestures on a touch screen or the arrow keys on your keyboard to move tiles in different directions.
+- Swipe or Arrow Key Controls : Use either swipe gestures on a touch screen or the arrow keys on your keyboard to move tiles in different directions.
     - Number Merging : Combine tiles with the same number by sliding them together.
     - Dynamic Number and Color Updates : Tiles change colors and font sizes based on their values, creating a visual progression as you merge them.
     - Game Over Condition : The game ends when the board is filled, and no more moves are possible.
@@ -14,7 +14,7 @@ This application is a classic implementation of the 2048 game using the Kivy fra
 
 ## Instructions
    ### Playing the Game:
-    - Launch the Game : Run the main.py file to start the game.
+- Launch the Game : Run the main.py file to start the game.
     - Move Tiles :
         - Use the arrow keys (up, down, left, right) on your keyboard.
         - Or, swipe in the desired direction on a touch screen.
